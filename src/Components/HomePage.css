@@ -1,0 +1,98 @@
+.container{
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   height: 100vh;
+}
+
+.leftside{
+    background-color:  #000E3C;
+    height: 100vh;
+}
+
+.rightside{
+    background-image: url('https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260');
+    height:100vh;
+    width: auto;
+    
+
+}
+
+.assignment-grading{
+    margin-top: 60px;
+    margin-left: 50px;
+    color:#FFFFFFB2;
+    ;
+}
+
+.horizontal-line{
+    margin-top: 40px;
+    margin-left: 10rem;
+    margin-right: 50px;
+    width: 25rem;
+}
+.signin-below{
+    margin-top: 40px;
+    color:#61D0C5;
+
+}
+
+.stutern{
+    margin-left: 50px;
+    color: #1BD3C6
+}
+
+.long-gist{
+    margin-left: 50px;
+    color:  #FFFFFFB2;
+
+}
+
+.email-address{
+    margin-bottom: 20px;
+    margin-left: 50px;
+}
+
+.signin-below{
+    margin-left: 50px;
+}
+
+.password{
+    margin-bottom: 20px;
+    margin-left:50px;
+}
+
+.sign-button{
+    margin-left: 50px;
+    width: 20em;
+    height: 30px;
+    cursor: pointer;
+    background-color:#1BD3C6;
+    color:#1B1642;
+    ;
+    border: none;
+    border-radius:8px
+    
+}
+
+.cardscreen{
+    border: solid 1px;
+    border-color:white;
+    margin-left: 10rem;
+    margin-right: 50px;
+    background-color: white;
+    border-radius: 8px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 25rem;
+}
+
+.email-input{
+    width: 20em;
+    height: 28px;
+    border: thin 1px;
+    border-radius: 5px;
+}
+
+.textCenter{
+    text-align: center;
+}

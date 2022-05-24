@@ -6,13 +6,12 @@
 
 .leftside{
     background-color:  #000E3C;
-    height: 100vh;
 }
 
 .rightside{
     background-image: url('https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260');
     height:100vh;
-    width: auto;
+    width: 100vw;
     
 
 }
@@ -37,7 +36,6 @@
 }
 
 .stutern{
-    margin-left: 50px;
     color: #1BD3C6
 }
 

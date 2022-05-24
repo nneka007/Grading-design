@@ -5,16 +5,23 @@
 .cardscreenn{
     border: solid 1px;
     border-color:#e4f9fb;
-    width: 350px;
-    height: 300px;
+    width: 450px;
+    height: 500px;
     padding-left: 20px;
     padding-top: 40px;
     padding-bottom: 40px;
     padding-right: 40px;
-    margin-left: 450px;
+    margin-left: 0px;
     background-color: #1bd3c6;
     margin-top: 15%;
     border-radius: 8px;
+}
+
+.courseSelect {
+    padding-top: 0.5rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    padding-bottom: 0.5rem;
 }
 
 .header{

@@ -26,13 +26,17 @@ function Login() {
     const result = await axios.post(
       "https://api.citrone.co/api/login",
       inputData
-    );
-    toggleLoading(false);
-    console.log(result);
-    localStorage.setItem("token", result.data.access_token);
-    setEnteredEmail("");
-    setEnteredPassword("");
-    navigate("/grading");
+    ).then((res) => {
+      toggleLoading(false);
+      localStorage.setItem("token", res.data.access_token);
+      setEnteredEmail("");
+      setEnteredPassword("");
+      navigate("/grading");
+    }).catch((err)=> {
+      console.log('error logging in', err);
+      alert('Error logging in')
+      toggleLoading(false);
+    })
   }
 
   return (

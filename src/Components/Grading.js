@@ -75,7 +75,7 @@ function Grading() {
     const assignments = result.data.assignment;
     let mappedAassignments = assignments.map((assignment, index) => {
       return {
-        name: `Assignment ${index + 1}`,
+        name: assignment.title,
         id: assignment._id,
       };
     });
@@ -100,14 +100,16 @@ function Grading() {
   }
 
   async function submitHandler() {
-    console.log("Mentor", selectedAssignment);
-    /*let token = localStorage.getItem("token");
+    const assignmentobject = assignments.find((x) => x.id === selectedAssignment);
+    console.log("assignmentid", assignmentobject);
+    let token = localStorage.getItem("token");
     let result = await axios.get(
       `https://api.citrone.co/api/assignment/all-answers/${selectedAssignment}`,
       { headers: { Authorization: `${token}` } }
     );
-    const assignments = result.data.assignment;
-    let allAnswers = assignments.map((item) => {
+    const assignmentss = result.data.assignment;
+    console.log('addd', assignmentss)
+    let allAnswers = assignmentss.map((item) => {
       return {
         link: item.answer,
         name: `${item.createdBy.firstName} ${item.createdBy.lastName}`,
@@ -116,14 +118,28 @@ function Grading() {
       };
     });
     console.log("eeeee", allAnswers);
-    let grades = await axios.post(
-      "http://localhost:4001/gradeassignment",
-      allAnswers,
+    const url = 'http://34.204.17.85:4001/gradeassignment'
+    // const url = 'http://localhost:4001/gradeassignment'
+    const grades = await axios.post(
+      url,
+      {
+        assignments: allAnswers,
+        type: assignmentobject.name.replace(' ', '_')
+      },
       { headers: { Authorization: `${token}` } }
-    );
-    localStorage.setItem("results", JSON.stringify(grades.data));
-    console.log("grades", grades.data);
-    navigate("/results"); */
+    ).then((res) => {
+      if(res.data === 'No assignment script yet'){
+        alert('No assignment script for this yet')
+      } else {
+        localStorage.setItem("results", JSON.stringify(res.data));
+        console.log("grades", grades.data);
+        navigate("/results");
+      }
+    }).catch((err) => {
+      console.log('jj', err)
+      alert('error while grading assignment')
+    })
+
   }
 
   return (

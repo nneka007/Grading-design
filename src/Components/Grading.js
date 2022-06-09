@@ -141,7 +141,7 @@ function Grading() {
     })
 
   }
-
+// http://grading-ui-v2.s3-website-us-east-1.amazonaws.com
   return (
     <div className="flex flex-row h-screen">
       <div style={{ backgroundColor: "#000E3C" }} className="w-1/2">

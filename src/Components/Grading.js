@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import "./Grading.css";
 
@@ -13,6 +14,7 @@ function Grading() {
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [assignments, setAssignments] = useState([]);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
+  const [loading, toggleLoading] = useState(false);
 
   function courseChangeHandler(event) {
     setEnteredCourse(event.target.value);
@@ -44,7 +46,7 @@ function Grading() {
 
   async function onSelectChange(event) {
     console.log("eee", event.target.value);
-    setLessons([])
+    setLessons([]);
     let token = localStorage.getItem("token");
     let result = await axios.post(
       "https://api.citrone.co/api/lesson/all/lessons",
@@ -66,7 +68,7 @@ function Grading() {
 
   async function onLessonSelectChange(event) {
     setSelectedLesson(event.target.value);
-    setAssignments([])
+    setAssignments([]);
     let token = localStorage.getItem("token");
     let result = await axios.get(
       `https://api.citrone.co/api/assignment/lesson/${event.target.value}`,
@@ -81,26 +83,30 @@ function Grading() {
     });
     console.log("resss22", mappedAassignments);
     if (mappedAassignments.length === 1) {
-      console.log('just one')
-      setAssignments([{
-        name: mappedAassignments[0].name,
-        id: mappedAassignments[0].id
-      }])
-      setSelectedAssignment(mappedAassignments[0].id)
+      console.log("just one");
+      setAssignments([
+        {
+          name: mappedAassignments[0].name,
+          id: mappedAassignments[0].id,
+        },
+      ]);
+      setSelectedAssignment(mappedAassignments[0].id);
     } else {
-      console.log('more than one')
+      console.log("more than one");
       setAssignments(mappedAassignments);
     }
-    console.log('')
+    console.log("");
   }
 
   async function onAssignmentSelectChange(event) {
-    alert(event.target.value);
     setSelectedAssignment(event.target.value);
   }
 
   async function submitHandler() {
-    const assignmentobject = assignments.find((x) => x.id === selectedAssignment);
+    toggleLoading(true);
+    const assignmentobject = assignments.find(
+      (x) => x.id === selectedAssignment
+    );
     console.log("assignmentid", assignmentobject);
     let token = localStorage.getItem("token");
     let result = await axios.get(
@@ -108,7 +114,7 @@ function Grading() {
       { headers: { Authorization: `${token}` } }
     );
     const assignmentss = result.data.assignment;
-    console.log('addd', assignmentss)
+    console.log("addd", assignmentss);
     let allAnswers = assignmentss.map((item) => {
       return {
         link: item.answer,
@@ -118,30 +124,35 @@ function Grading() {
       };
     });
     console.log("eeeee", allAnswers);
-    const url = 'http://34.204.17.85:4001/gradeassignment'
-    // const url = 'http://localhost:4001/gradeassignment'
-    const grades = await axios.post(
-      url,
-      {
-        assignments: allAnswers,
-        type: assignmentobject.name.replace(' ', '_')
-      },
-      { headers: { Authorization: `${token}` } }
-    ).then((res) => {
-      if(res.data === 'No assignment script yet'){
-        alert('No assignment script for this yet')
-      } else {
-        localStorage.setItem("results", JSON.stringify(res.data));
-        console.log("grades", grades.data);
-        navigate("/results");
-      }
-    }).catch((err) => {
-      console.log('jj', err)
-      alert('error while grading assignment')
-    })
-
+    const url = 'https://grading.citrone.co/gradeassignment'
+    // const url = "http://localhost:4001/gradeassignment";
+    const grades = await axios
+      .post(
+        url,
+        {
+          assignments: allAnswers,
+          type: assignmentobject.name.replace(" ", "_"),
+        },
+        { headers: { Authorization: `${token}` } }
+      )
+      .then((res) => {
+        if (res.data === "No assignment script yet") {
+          toggleLoading(false);
+          alert("No assignment script for this yet");
+        } else {
+          toggleLoading(false);
+          localStorage.setItem("results", JSON.stringify(res.data));
+          // console.log("grades", grades.data);
+          navigate("/results");
+        }
+      })
+      .catch((err) => {
+        console.log("jj", err);
+        toggleLoading(false);
+        alert("error while grading assignment");
+      });
   }
-// http://grading-ui-v2.s3-website-us-east-1.amazonaws.com
+  // http://grading-ui-v2.s3-website-us-east-1.amazonaws.com
   return (
     <div className="flex flex-row h-screen">
       <div style={{ backgroundColor: "#000E3C" }} className="w-1/2">
@@ -205,9 +216,19 @@ function Grading() {
             </div>
           </div>
           <div>
-            <button onClick={() => submitHandler()} className="border-2 rounded-md py-5 px-10 mt-5">
-              Grade Assignment
-            </button>
+            {loading ? (
+             <div className="mt-6">
+                <Spin />
+               <p>Grading assignment.....Please wait</p>
+             </div>
+            ) : (
+              <button
+                onClick={() => submitHandler()}
+                className="border-2 rounded-md py-5 px-10 mt-5"
+              >
+                Grade Assignment
+              </button>
+            )}
           </div>
         </div>
       </div>

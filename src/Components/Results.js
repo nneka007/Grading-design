@@ -20,21 +20,6 @@ export default function Results() {
     setResults(ddd);
   }, []);
 
-  const dataSource = [
-    {
-      key: "1",
-      name: "Mike",
-      age: 32,
-      address: "10 Downing Street",
-    },
-    {
-      key: "2",
-      name: "John",
-      age: 42,
-      address: "10 Downing Street",
-    },
-  ];
-
   const columns = [
     {
       title: "Name",
@@ -75,7 +60,13 @@ export default function Results() {
             })}
           </>
         ),
-      }
+      },
+      {
+        title: 'Action',
+        dataIndex: '',
+        key: 'x',
+        render: () => <a>Send result</a>,
+      },
   ];
   return (
     <div>

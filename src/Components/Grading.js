@@ -102,6 +102,10 @@ function Grading() {
     setSelectedAssignment(event.target.value);
   }
 
+  function replaceAll(string, search, replace) {
+    return string.split(search).join(replace);
+  }
+
   async function submitHandler() {
     toggleLoading(true);
     const assignmentobject = assignments.find(
@@ -124,16 +128,17 @@ function Grading() {
       };
     });
     console.log("eeeee", allAnswers);
-    const url = 'https://grading.citrone.co/gradeassignment'
+    const url = "https://grading.citrone.co/gradeassignment";
+    const assignmentName = replaceAll(assignmentobject.name, " ", "_");
+    // console.log('kkh', replaceAll(assignmentobject.name, " ", "_"))
     // const url = "http://localhost:4001/gradeassignment";
     const grades = await axios
       .post(
         url,
         {
           assignments: allAnswers,
-          type: assignmentobject.name.replace(" ", "_"),
-        },
-        { headers: { Authorization: `${token}` } }
+          type: replaceAll(assignmentName, "-", "_"),
+        }
       )
       .then((res) => {
         if (res.data === "No assignment script yet") {
@@ -217,10 +222,10 @@ function Grading() {
           </div>
           <div>
             {loading ? (
-             <div className="mt-6">
+              <div className="mt-6">
                 <Spin />
-               <p>Grading assignment.....Please wait</p>
-             </div>
+                <p>Grading assignment.....Please wait</p>
+              </div>
             ) : (
               <button
                 onClick={() => submitHandler()}

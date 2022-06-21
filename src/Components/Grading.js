@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Spin } from "antd";
+import { Spin, Checkbox } from "antd";
 import { useNavigate } from "react-router-dom";
 import "./Grading.css";
 
@@ -15,6 +15,7 @@ function Grading() {
   const [assignments, setAssignments] = useState([]);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [loading, toggleLoading] = useState(false);
+  const [isJavaScript, setIsJavaScript] = useState(false);
 
   function courseChangeHandler(event) {
     setEnteredCourse(event.target.value);
@@ -95,7 +96,6 @@ function Grading() {
       console.log("more than one");
       setAssignments(mappedAassignments);
     }
-    console.log("");
   }
 
   async function onAssignmentSelectChange(event) {
@@ -128,16 +128,17 @@ function Grading() {
       };
     });
     console.log("eeeee", allAnswers);
-    const url = "https://grading.citrone.co/gradeassignment";
+    // const url = "https://grading.citrone.co/gradeassignment";
     const assignmentName = replaceAll(assignmentobject.name, " ", "_");
     // console.log('kkh', replaceAll(assignmentobject.name, " ", "_"))
-    // const url = "http://localhost:4001/gradeassignment";
+    const url = "http://localhost:4001/gradeassignment";
     const grades = await axios
       .post(
         url,
         {
           assignments: allAnswers,
           type: replaceAll(assignmentName, "-", "_"),
+          isJavaScript: isJavaScript
         }
       )
       .then((res) => {
@@ -157,7 +158,10 @@ function Grading() {
         alert("error while grading assignment");
       });
   }
-  // http://grading-ui-v2.s3-website-us-east-1.amazonaws.com
+  const onChange = (e) => {
+    console.log(`checked = ${e.target.checked}`);
+    setIsJavaScript(e.target.checked)
+  };
   return (
     <div className="flex flex-row h-screen">
       <div style={{ backgroundColor: "#000E3C" }} className="w-1/2">
@@ -183,6 +187,7 @@ function Grading() {
                 onChange={onSelectChange}
                 className="p-3 border-2 rouded-md"
               >
+                <option>Select course</option>
                 {courses.map((item) => (
                   <option value={item.id}>{item.name}</option>
                 ))}
@@ -197,6 +202,7 @@ function Grading() {
                 onChange={onLessonSelectChange}
                 className="p-3 border-2 rouded-md w-48"
               >
+                <option>Select lesson</option>
                 {lessons.map((item) => (
                   <option value={item.id}>{item.name}</option>
                 ))}
@@ -214,12 +220,14 @@ function Grading() {
                 value={selectedAssignment}
                 className="p-3 border-2 rouded-md w-48"
               >
+                <option>Select assignment</option>
                 {assignments.map((item) => (
                   <option value={item.id}>{item.name}</option>
                 ))}
               </select>
             </div>
           </div>
+          <Checkbox style={{marginTop: 20}} onChange={onChange}>Is this a JavaScript assignment ?</Checkbox>
           <div>
             {loading ? (
               <div className="mt-6">

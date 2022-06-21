@@ -128,10 +128,10 @@ function Grading() {
       };
     });
     console.log("eeeee", allAnswers);
-    // const url = "https://grading.citrone.co/gradeassignment";
+    const url = "https://grading.citrone.co/gradeassignment";
     const assignmentName = replaceAll(assignmentobject.name, " ", "_");
     // console.log('kkh', replaceAll(assignmentobject.name, " ", "_"))
-    const url = "http://localhost:4001/gradeassignment";
+    // const url = "http://localhost:4001/gradeassignment";
     const grades = await axios
       .post(
         url,

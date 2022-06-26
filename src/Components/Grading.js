@@ -46,7 +46,6 @@ function Grading() {
   }, []);
 
   async function onSelectChange(event) {
-    console.log("eee", event.target.value);
     setLessons([]);
     let token = localStorage.getItem("token");
     let result = await axios.post(
@@ -63,7 +62,6 @@ function Grading() {
         id: lesson.lesson._id,
       };
     });
-    console.log("resss", mappedLessons);
     setLessons(mappedLessons);
   }
 
@@ -82,9 +80,7 @@ function Grading() {
         id: assignment._id,
       };
     });
-    console.log("resss22", mappedAassignments);
     if (mappedAassignments.length === 1) {
-      console.log("just one");
       setAssignments([
         {
           name: mappedAassignments[0].name,
@@ -93,7 +89,6 @@ function Grading() {
       ]);
       setSelectedAssignment(mappedAassignments[0].id);
     } else {
-      console.log("more than one");
       setAssignments(mappedAassignments);
     }
   }
@@ -111,14 +106,12 @@ function Grading() {
     const assignmentobject = assignments.find(
       (x) => x.id === selectedAssignment
     );
-    console.log("assignmentid", assignmentobject);
     let token = localStorage.getItem("token");
     let result = await axios.get(
       `https://api.citrone.co/api/assignment/all-answers/${selectedAssignment}`,
       { headers: { Authorization: `${token}` } }
     );
     const assignmentss = result.data.assignment;
-    console.log("addd", assignmentss);
     let allAnswers = assignmentss.map((item) => {
       return {
         link: item.answer,
@@ -127,20 +120,15 @@ function Grading() {
         id: item._id,
       };
     });
-    console.log("eeeee", allAnswers);
     const url = "https://grading.citrone.co/gradeassignment";
     const assignmentName = replaceAll(assignmentobject.name, " ", "_");
-    // console.log('kkh', replaceAll(assignmentobject.name, " ", "_"))
     // const url = "http://localhost:4001/gradeassignment";
     const grades = await axios
-      .post(
-        url,
-        {
-          assignments: allAnswers,
-          type: replaceAll(assignmentName, "-", "_"),
-          isJavaScript: isJavaScript
-        }
-      )
+      .post(url, {
+        assignments: allAnswers,
+        type: replaceAll(assignmentName, "-", "_"),
+        isJavaScript: isJavaScript,
+      })
       .then((res) => {
         if (res.data === "No assignment script yet") {
           toggleLoading(false);
@@ -148,19 +136,16 @@ function Grading() {
         } else {
           toggleLoading(false);
           localStorage.setItem("results", JSON.stringify(res.data));
-          // console.log("grades", grades.data);
           navigate("/results");
         }
       })
       .catch((err) => {
-        console.log("jj", err);
         toggleLoading(false);
         alert("error while grading assignment");
       });
   }
   const onChange = (e) => {
-    console.log(`checked = ${e.target.checked}`);
-    setIsJavaScript(e.target.checked)
+    setIsJavaScript(e.target.checked);
   };
   return (
     <div className="flex flex-row h-screen">
@@ -211,9 +196,7 @@ function Grading() {
           </div>
           <div className="mt-5">
             <label>Assignments</label>
-            {/* <p>{selectedAssignment}</p> */}
             <div>
-              {/* <input value={enteredAssignmet} onChange={assignmentChangeHandler} className='course-input' placeholder='Assignment name'></input> */}
               <select
                 id="assignment"
                 onChange={onAssignmentSelectChange}
@@ -227,7 +210,9 @@ function Grading() {
               </select>
             </div>
           </div>
-          <Checkbox style={{marginTop: 20}} onChange={onChange}>Is this a JavaScript assignment ?</Checkbox>
+          <Checkbox style={{ marginTop: 20 }} onChange={onChange}>
+            Is this a JavaScript assignment ?
+          </Checkbox>
           <div>
             {loading ? (
               <div className="mt-6">

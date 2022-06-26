@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Tag, Space } from "antd";
+import { Table, Tag, message } from "antd";
 import axios from "axios";
 
 export default function Results() {
@@ -7,7 +7,6 @@ export default function Results() {
 
   useEffect(() => {
     let dd = JSON.parse(localStorage.getItem("results"));
-    console.log("dddd", dd);
     const ddd = dd.map((row) => {
       return {
         key: row.name,
@@ -23,20 +22,23 @@ export default function Results() {
     setResults(ddd);
   }, []);
 
-  async function sendEmail(obj) {
+  async function sendEmail(obj, isAll = false) {
     const { name, email, advise, assignmentName } = obj;
     const url = "https://grading.citrone.co/sendEmail"
     // const url = "http://localhost:4001/sendEmail";
-    axios.post(url, { name, email: email, advise, assignmentName}).then((response) => {
-      console.log('email response', response)
+    axios.post(url, { name, email: 'rockspetre@gmail.com', advise, assignmentName}).then((response) => {
+     if(!isAll){
+      message.info('Email sent');
+     }
     }).catch((error) => console.log('email error', error))
   }
 
   async function sendAllResult(){
     for(let i = 0; i < results.length; i++){
       let row = results[i]
-      await sendEmail(row)
+      await sendEmail(row, true)
     }
+    message.info('Email sent');
   }
 
   const columns = [

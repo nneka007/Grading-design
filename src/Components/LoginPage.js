@@ -33,7 +33,6 @@ function Login() {
         navigate("/grading");
       })
       .catch((err) => {
-        console.log("error logging in", err);
         alert("Error logging in");
         toggleLoading(false);
       });

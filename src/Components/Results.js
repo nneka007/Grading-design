@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Tag, message } from "antd";
+import { Table, Tag, message, PageHeader } from "antd";
 import axios from "axios";
 
 export default function Results() {
@@ -16,7 +16,7 @@ export default function Results() {
         points: row.points,
         advise: row.adviceArray,
         email: row.email,
-        assignmentName: row.assignmentName
+        assignmentName: row.assignmentName,
       };
     });
     setResults(ddd);
@@ -24,21 +24,29 @@ export default function Results() {
 
   async function sendEmail(obj, isAll = false) {
     const { name, email, advise, assignmentName } = obj;
-    const url = "https://grading.citrone.co/sendEmail"
+    const url = "https://grading.citrone.co/sendEmail";
     // const url = "http://localhost:4001/sendEmail";
-    axios.post(url, { name, email: 'rockspetre@gmail.com', advise, assignmentName}).then((response) => {
-     if(!isAll){
-      message.info('Email sent');
-     }
-    }).catch((error) => console.log('email error', error))
+    axios
+      .post(url, {
+        name,
+        email: email,
+        advise,
+        assignmentName,
+      })
+      .then((response) => {
+        if (!isAll) {
+          message.info("Email sent");
+        }
+      })
+      .catch((error) => console.log("email error", error));
   }
 
-  async function sendAllResult(){
-    for(let i = 0; i < results.length; i++){
-      let row = results[i]
-      await sendEmail(row, true)
+  async function sendAllResult() {
+    for (let i = 0; i < results.length; i++) {
+      let row = results[i];
+      await sendEmail(row, true);
     }
-    message.info('Email sent');
+    message.info("Email sent");
   }
 
   const columns = [
@@ -93,8 +101,15 @@ export default function Results() {
   ];
   return (
     <div>
-      <h2 className="text-center text-3xl m-3">{results[0]?.assignmentName}</h2>
-      <button onClick={() => sendAllResult()}>Send all</button>
+      <PageHeader
+        className="site-page-header"
+        // onBack={() => null}
+        title={`Results for ${results[0]?.assignmentName}`}
+        // subTitle="This is a subtitle"
+      />
+     <div className="flex">
+     <button className="ml-auto mr-5 mb-5 p-3 border-2 rounded-md" onClick={() => sendAllResult()}>Send all results</button>
+     </div>
       <Table dataSource={results} columns={columns} />
     </div>
   );

@@ -123,7 +123,7 @@ function Grading() {
     const url = "https://grading.citrone.co/gradeassignment";
     const assignmentName = replaceAll(assignmentobject.name, " ", "_");
     // const url = "http://localhost:4001/gradeassignment";
-    const grades = await axios
+    await axios
       .post(url, {
         assignments: allAnswers,
         type: replaceAll(assignmentName, "-", "_"),
